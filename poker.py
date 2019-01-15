@@ -24,6 +24,42 @@ class Poker:
 
     def deal(self, num):
         cards = []
-        for i in range(num):
+        for _ in range(num):
             cards.append(self.deck.pop())
         return cards
+
+
+class TexasHoldem(Poker):
+
+    NUM_FLOP = 3
+    NUM_TURN = 1
+    NUM_RIVER = 1
+    NUM_HAND = 2
+
+    def __init__(self):
+        super(TexasHoldem, self).__init__()
+
+    def deal_hands(self):
+        return self.deal(self.NUM_HAND)
+
+    def deal_flop(self):
+        self.burn_card()
+        return self.deal(self.NUM_FLOP)
+
+    def deal_turn(self):
+        self.burn_card()
+        return self.deal(self.NUM_TURN)
+
+    def deal_river(self):
+        self.burn_card()
+        return self.deal(self.NUM_RIVER)
+
+    def burn_card(self):
+        """Put 1 card aside"""
+        self.deal(1)
+
+    def deal_public(self):
+        public_cards = self.deal_flop()
+        public_cards.extend(self.deal_turn())
+        public_cards.extend(self.deal_river())
+        return public_cards
